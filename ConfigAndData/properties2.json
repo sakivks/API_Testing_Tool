@@ -1,0 +1,50 @@
+{
+    "Folder": {
+        "Sample_Folder": "sampleData",
+        "Config_Folder": "ConfigAndData",
+        "MPM_SEPA_Receiver_Bulk": "//blrvswasubdev14/SEPA/Receiver/BulkPosting/Processed",
+        "Sample_Output_Folder": "sampleData/output/",
+        "Sample_Input_Folder": "sampleData/input"
+    },
+    "File": {
+        "Sample_XML": "$(Sample_Folder)/sample.xml",
+        "Sample_Test_Result": "$(Sample_Folder)/result/sampleTestResult.csv",
+        "processList" : "$(Config_Folder)/csvFile/processList.csv",
+        "variableList" : "$(Config_Folder)/csvFile/Variable.csv",
+        "amendPartyRq" : "$(Sample_Folder)/amendPartyRq.xml"
+    },
+    "Setting": {
+        "delayBetweenSteps": "1000",
+        "queue_read_timeout" : "10000",
+        "LogPrefix": "MM-dd_HH-mm-ss_",
+        "LogMessages": "output",
+        "Soap_WS_Response_Folder": "D:/AutomationTool/soapResponse",
+        "printMsgInConsole": "output",
+        "LogFolder": "$(Sample_Folder)/log",
+        "Test_Enabled": "false",
+        "Create_Fresh_Result_File" : "true",
+		"automatedProcessList": "ap",
+        "pseudoListen_onQueue" : "false",
+        "automatedRun": "false",
+        "Machine_for_WS" : "blrvswasubdev13:8080"
+    },
+    "Variable": {
+        "msgIdCounter" : "msgid-vks-113",
+        "loadVariableList" :  "#readVariableList($(variableList))",
+		"userName" : "brad",
+		"payloadVar" : "UNIQUE_ID=134;PT_PFN_Party#PARTYID=7000002;PT_PFN_Party#KYCSTATUS=001;PT_PFN_Party#WATCHLISTSTATUS=Y",
+		"password" : "welcome@99",
+		"rsParam1": "UNIQUE_ID=134;PARTY_ID=7000002;STATUS=Success",
+		"rsParam": "UNIQUE_ID=134;PARTY_ID=7000002;STATUS=Success"
+    },
+    "QueueManager": {
+        "UB": "[QM_VIKAS,BLRCSWUBINB0008,1414]"
+    },
+    "Queue": {
+        "UB_FBO": "[UB,FROM.BACK.OFFICE.Q]"
+    },
+    "SoapService": {
+        "getAccountWS": "http://$(Machine_for_WS)/bfweb/services/SearchAccount"
+    }
+
+}

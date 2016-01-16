@@ -1,0 +1,84 @@
+[
+//Some beautiful comment
+{
+    name: "Sample Test Route File to Folder",
+    shortcut: "samp_1",
+    steps: [{
+        name: "Moving a file to input FolderMoving a file to input Folder",
+        input: "$(Sample_XML)",
+        processing: {
+            setTagValue: {
+                "BookingAction": "$(PostingAction)",
+                "MsgId":"#increment($(msgIdCounter))"
+            }
+        },
+        output : "Sample_Input_Folder"
+    }],
+    test_step: [{
+        name: "File To Folder Sample test",
+        input: "#latest($(Sample_Input_Folder))",
+        processing: {
+            compareTagValue: {
+                "BookingAction": "It Works"            
+            },
+            getTagValue: {
+                "MessagId":"ValidationStatus"
+            }   
+        },
+    	output: "#appendToFile($(Sample_Test_Result))"
+    }]
+},
+{
+    name: "Amend Party WS Call",
+    shortcut: "ap",
+    steps: [{
+        name: "just do it",
+        input: "$(amendPartyRq)",
+        processing: {
+            setTagValue: {
+                "userName" : "$(userName)",
+                "password" : "$(password)",
+                "rqParam": "$(payloadVar)"
+            }
+        },
+        output: "$(Sample_Input_Folder)"
+    }],    
+    test_step: [{
+        name: "Amend Party Soap Test",
+        input: "#latest($(WS_Response_Folder))",
+        processing: {
+            compareTagValue: {
+                "rsParam": "$(rsParam1)"
+            }
+        },
+        output: "#appendToFile($(Sample_Test_Result))"
+    }]
+},
+{
+    name: "Sample Test Route Folder to Folder",
+    shortcut: "samp_2",
+    steps: [{
+        name: "Moving a file from input to output Folder",
+        input: "$(Sample_Input_Folder)",
+        processing: {
+            setTagValue: {
+                "AccountDetails|accountId[1]": "$(Saving_Account_1)",
+                "PaymentPriority": "$(MessagId)"
+            }
+        },
+        output : "$(Sample_Output_Folder)"
+    }],
+    test_step: [{
+        name: "Folder To Folder Sample test",
+        input: "#latest($(Sample_Output_Folder))",
+        processing: {
+            compareTagValue: {
+                "BookingAction": "$(PostingAction)",
+                "AccountDetails|accountId[1 .. 2]" : "{acc2,$(Saving_Account_1)}",            
+                "AccountDetails|accountId[0 .. 2]" : "{acc10,$(Saving_Account_1),acc2}"            
+            }
+        },
+        output: "#appendToFile($(Sample_Test_Result))"
+    }]
+}
+]

@@ -1,0 +1,11 @@
+key, value, description
+sampAcc_a , acc0
+sampAcc_b , acc1
+sampAcc_c , acc2
+
+Saving_Account_1, 01210PTY100,
+Saving_Account_2, EUR_Account01, EUR Account
+
+PostingAction , Generate Posting
+
+
