@@ -107,11 +107,15 @@ public class Task implements Structure {
 				passStatus = false;
 			}
 			else if(!isTagList && !(expectedTagValueList.get(0).trim().equalsIgnoreCase(tagValue.trim()))){
-				responseString = tagNames + " - expected \""+ expectedTagValueList.get(0).trim() + "\" found \"" + tagValue.trim() +"\"";
-				passStatus = false;
+				if(specialScenarios(tagValue,expectedTagValueList.get(0))){
+					
+				}else{
+					responseString = tagNames + " - expected \""+ expectedTagValueList.get(0).trim() + "\" found \"" + tagValue.trim() +"\"";
+					passStatus = false;					
+				}
 			}
 			else if(!(expectedTagValueList.contains(tagValue.trim()))){
-				responseString = responseString + (responseString.equals("")?"":", ") +  tagName + " - expected \""+ tagValue.trim() + "\" Not found in the List " + Core.printList(expectedTagValueList);
+				responseString = responseString + (responseString.equals("")?"":", ") +  tagName + " - found \""+ tagValue.trim() + "\" Not present in the expectation list " + Core.printList(expectedTagValueList);
 				passStatus = false;
 			}
 		}
@@ -120,6 +124,14 @@ public class Task implements Structure {
 		return response;
 	}
 
+	private static boolean specialScenarios(String tagValue, String expectedTagValueList) {
+		if (expectedTagValueList.trim().equalsIgnoreCase("#NotEmpty()") && tagValue.trim().length()>0)
+			return true;
+		else 
+			return false;
+	}
+
+	
 	@Override
 	public String get(List<String> value) throws GotNullException {
 		return null;
