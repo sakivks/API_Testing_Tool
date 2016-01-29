@@ -16,32 +16,34 @@ public class Core {
 
 	public static void main(String[] args) {
 
-		Variable.main(null);
-		List<Object> msg = new ArrayList<>();
+//		Variable.main(null);
+//		List<Object> msg = new ArrayList<>();
 //		msg.add("someThing write");
 //		System.out.println(Core.processHyperString("ok man #get($(Sample_XML))",null));
 //		System.out.println(Core.processHyperString("#set($(Sample_Folder))",msg));
-		System.out.println(Core.processHyperString("asdfa $(Sample_Folder)",msg));
+//		System.out.println(Core.processHyperString("asdfa $(Sample_Folder)",msg));
 //		System.out.println(Core.processHyperString("$(Sample_Folder)",msg));
 //		Core.processHyperString("#get(#latest($(Sample_Input_Folder)))",null);
-	
+
+		Core.processHyperString2("a $(x3_12)sa h() #fn(asdf)asdjl$(xyz)#fn2($(mn))anditends", null);
 	}
 
 	public static String processHyperString2(String hyperString,List<Object> context){
 		
-		//String input = "lorem substr1 ipsum substr2 dolor substr3 amet";
-
 		// create the pattern joining the keys with '|'
-		String regexp = "substr1|substr2|substr3";
+		String regexp = "\\$\\(\\w+\\)|#\\w+\\(.*?\\)+";
 
 		StringBuffer sb = new StringBuffer();
 		Pattern p = Pattern.compile(regexp);
 		Matcher m = p.matcher(hyperString);
 
 		while (m.find())
-		    m.appendReplacement(sb, processor(m.group()));
-		m.appendTail(sb);
+		{
+			m.appendReplacement(sb, processor(m.group()));		
+			System.out.println(m.group());
+		}
 
+		m.appendTail(sb);
 		System.out.println(sb.toString());   
 		
 		return null;
@@ -50,9 +52,9 @@ public class Core {
 	private static String processor(String inputStr) {
 		inputStr = inputStr.trim();
 		if(inputStr.startsWith("#")){
-			
+			return "FunctioN";
 		}else if(inputStr.startsWith("$(")){
-			
+			return "VariablE";
 		}
 		return null;
 	}
