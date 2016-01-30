@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import vdsl.exception.GotNullException;
+import vdsl.interpreter.ComparePayload;
 import vdsl.interpreter.Variable;
 import vdsl.interpreter.core.Core;
 import vdsl.xml.XmlEditor;
@@ -14,13 +15,16 @@ import vdsl.xml.XmlEditor;
 @SuppressWarnings("unchecked")
 public class Task implements Structure {
 	
+	public static final String PASS = "PASS";
+	public static final String FAIL = "FAIL";
+	public static final String FAIL_NO_RESPONSE = "FAIL , NO_RESPONSE_RECIEVED";
+	public static final String COMMAND_TAG_NOT_FOUND = "TAG_NOT_FOUND";
 	
 	public Task(List<String> values,String key) {
 		
 	}
 
-
-	public static String getTagValue(List<Object> param){
+	public String getTagValue(List<Object> param){
 		String message = (String) param.get(0);
 		Map<String,String> tagMap = (Map<String, String>) param.get(1);
 		Iterator<String> mapIt = tagMap.keySet().iterator();
@@ -32,7 +36,7 @@ public class Task implements Structure {
 		return message;
 	}
 	
-	public static String setTagValue(List<Object> param){
+	public String setTagValue(List<Object> param){
 		String message = (String) param.get(0);
 		Map<String,String> tagMap = (Map<String, String>) param.get(1);
 		Iterator<String> mapIt = tagMap.keySet().iterator();
@@ -43,13 +47,13 @@ public class Task implements Structure {
 		return message;
 	}
 
-	public static String compareTagValue(List<Object> param){
+	public String compareTagValue(List<Object> param){
 		String message = (String) param.get(0);
-		String responseMessage = "PASS";
+		String responseMessage = PASS;
 		String expectedTagHyperString;
 		List<String> response = new ArrayList<>();
 		if(message == null){
-			return "FAIL , NO_RESPONSE_RECIEVED";
+			return FAIL_NO_RESPONSE;
 		}
 		Boolean hasFailed = false;
 		Map<String,String> tagMap = (Map<String, String>) param.get(1);
@@ -68,7 +72,32 @@ public class Task implements Structure {
 		return responseMessage + (hasFailed?"}":"");
 	}
 
+	private String compare(List<ComparePayload> payload){
+		Iterator lstIt = payload.iterator();
+		boolean failed = false;
+		StringBuilder reasonsForFailure = new StringBuilder("{");
 		
+		while (lstIt.hasNext()) {
+			ComparePayload payloadInstance = (ComparePayload) lstIt.next();
+			String outcome = payloadInstance.compare();
+			if(outcome != null){
+				if(failed)
+					reasonsForFailure.append(", "+outcome);
+				else{
+					reasonsForFailure.append(" "+outcome);
+					failed = true;
+				}
+					
+			}
+		}
+		
+		if(failed)
+			return FAIL + ", " + reasonsForFailure.toString();
+		else
+			return PASS;
+	}
+		
+	@Deprecated
 	private static List<String> getTagCompareResult(String tagNames, String expectedTagsHyperString, String message) {
 		List<String> response = new ArrayList<>();
 		boolean passStatus = true, isTagList = false;
