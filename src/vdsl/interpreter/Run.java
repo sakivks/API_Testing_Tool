@@ -37,8 +37,9 @@ public class Run {
 
 		propertyVariables.initialize();
 		initializeAutomatedProcessList();
+		String str = VdslDealer.readBuildFile();
 		while (true) {
-			Object[] prcSelectorResponse = processSelector();
+			Object[] prcSelectorResponse = processSelector(str);
 			Process process = (Process) prcSelectorResponse[0];
 			if (!(process == null))
 				process.execute();
@@ -59,7 +60,7 @@ public class Run {
 		}
 	}
 
-	private Object[] processSelector() throws JSONException {
+	private Object[] processSelector(String buildStr) throws JSONException {
 
 		Object[] prcSelectorResponse = new Object [2];
 		Process prc = null;
@@ -67,7 +68,7 @@ public class Run {
 		String choice = null;
 		boolean reloadFlag = false, exitFlag = false;
 		List<JSONObject> objList = new ArrayList<JSONObject>();
-		String str = VdslDealer.readBuildFile();
+		String str = buildStr;
 		automatedRun = Boolean.parseBoolean(Variable.getString("automatedRun"));
 		exitFlag = automatedRun;
 		buildArray =  new JSONArray(str);
