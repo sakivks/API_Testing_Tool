@@ -75,9 +75,14 @@ public class Task implements Structure {
 		String responseString = "";
 //		List<String> expectedTagValue = Core.processHyperString(expectedTagHyperString, null);
 //		String[] expectedTagArr = ;
-		List<String> expectedTagValueListHS = Arrays.asList(Core.simpleSubString(expectedTagsHyperString,"[","]").split("\\s*,\\s*"));
-		List<String> tagNameList = new ArrayList<>();
+		List<String> expectedTagValueListHS = new ArrayList<>();
 		List<String> expectedTagValueList = new ArrayList<>();
+		if(Core.isTagList(tagNames)){
+			expectedTagValueListHS = Arrays.asList(Core.simpleSubString(expectedTagsHyperString,"[","]").split("\\s*,\\s*"));			
+		} else {
+			expectedTagValueList.add(Core.processHyperString(expectedTagsHyperString, null));
+		}
+		List<String> tagNameList = new ArrayList<>();
 		for (String expectedHS : expectedTagValueListHS) {
 			expectedTagValueList.add(Core.processHyperString(expectedHS, null));
 		}
